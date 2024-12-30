@@ -41,4 +41,8 @@ Bitboard generate_capture_pawn_moves(Bitboard, Bitboard, Color);
 // Generates the en pessant captures pawns can make
 Bitboard generate_en_pessant_pawn_moves(Bitboard, Bitboard, Color);
 
+Bitboard generate_knight_moves(Bitboard);
+Bitboard generate_quiet_knight_moves(Bitboard, Bitboard);
+Bitboard generate_capture_knight_moves(Bitboard, Bitboard);
+
 #endif // !MOVE_H

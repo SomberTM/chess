@@ -55,3 +55,27 @@ Bitboard generate_capture_pawn_moves(Bitboard pawns, Bitboard other_color_pieces
 Bitboard generate_en_pessant_pawn_moves(Bitboard pawns, Bitboard en_pessant_bitboard, Color color) {
 	return generate_capture_pawn_moves(pawns, en_pessant_bitboard, color);
 }
+
+Bitboard generate_knight_moves(Bitboard knights) {
+	Bitboard moves = create_bitboard();
+
+	moves |= (knights >> 6) & ~FILE_G & ~FILE_H; // two left, one up
+	moves |= (knights << 10) & ~FILE_G & ~FILE_H; // two left, one down
+	moves |= (knights >> 10) & ~FILE_A & ~FILE_B; // two right, one up
+	moves |= (knights << 6) & ~FILE_A & ~FILE_B; // two right, one down
+
+	moves |= (knights >> 15) & ~FILE_H; // one left, two up
+	moves |= (knights << 17) & ~FILE_H; // one left, two down
+	moves |= (knights >> 17) & ~FILE_A; // one right, two up
+	moves |= (knights << 15) & ~FILE_A; // one right, two down
+	
+	return moves;
+}
+
+Bitboard generate_quiet_knight_moves(Bitboard knights, Bitboard occupied_squares) {
+	return generate_knight_moves(knights) & ~occupied_squares;
+}
+
+Bitboard generate_capture_knight_moves(Bitboard knights, Bitboard other_color_pieces) {
+	return generate_knight_moves(knights) & other_color_pieces;
+}
