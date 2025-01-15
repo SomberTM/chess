@@ -24,25 +24,18 @@ typedef enum {
 
 typedef uint16_t Move;
 
-Move create_move(uint8_t, uint8_t, MoveFlag);
-uint8_t get_from_square(Move);
-uint8_t get_to_square(Move);
+Move create_move(Square, Square, MoveFlag);
+Square get_from_square(Move);
+Square get_to_square(Move);
 MoveFlag get_flag(Move);
 
-// might consider making moves color independent. i.e. have some mechanism
-// for flipping and inverting black bitboards and treat them as white. Transformation
-// opeartion may occur before or as part of the method idk.
-
-// Simply generates the single/double push pawn moves, ignoring captures
-// and special cases such as en pessant.
-Bitboard generate_quiet_pawn_moves(Bitboard, Bitboard, Color);
-// Generates the captures pawns can make ignoring en pessant
-Bitboard generate_capture_pawn_moves(Bitboard, Bitboard, Color);
-// Generates the en pessant captures pawns can make
-Bitboard generate_en_pessant_pawn_moves(Bitboard, Bitboard, Color);
-
+/*
 Bitboard generate_knight_moves(Bitboard);
 Bitboard generate_quiet_knight_moves(Bitboard, Bitboard);
 Bitboard generate_capture_knight_moves(Bitboard, Bitboard);
+
+Bitboard generate_quiet_rook_moves(Bitboard, Bitboard);
+Bitboard generate_capture_rook_moves(Bitboard, Bitboard);
+*/
 
 #endif // !MOVE_H
