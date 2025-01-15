@@ -29,13 +29,4 @@ Square get_from_square(Move);
 Square get_to_square(Move);
 MoveFlag get_flag(Move);
 
-/*
-Bitboard generate_knight_moves(Bitboard);
-Bitboard generate_quiet_knight_moves(Bitboard, Bitboard);
-Bitboard generate_capture_knight_moves(Bitboard, Bitboard);
-
-Bitboard generate_quiet_rook_moves(Bitboard, Bitboard);
-Bitboard generate_capture_rook_moves(Bitboard, Bitboard);
-*/
-
 #endif // !MOVE_H

@@ -5,12 +5,19 @@
 #include "bitboard.h"
 
 Game* create_game() {
+	GameOptions options = {}
+	return create_game_with_options(options);
+}
+
+Game* create_game_with_options(GameOptions options) {
 	Game* game = malloc(sizeof(Game));
 	assert(game != NULL);
 
-	for (Color c = WHITE; c <= BLACK; c++) {
-		for (Piece p = PAWN; p <= KING; p++) {
-			game->pieces[c][p] = create_bitboard_for_piece(c, p);
+	if (!options.empty_board) {
+		for (Color c = WHITE; c <= BLACK; c++) {
+			for (Piece p = PAWN; p <= KING; p++) {
+				game->pieces[c][p] = create_bitboard_for_piece(c, p);
+			}
 		}
 	}
 

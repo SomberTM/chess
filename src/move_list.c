@@ -29,7 +29,14 @@ bool cmp_move_lists(const MoveList* lhs, const MoveList* rhs) {
 int compare_moves(const void* a, const void* b) {
     Move ma = *(Move*)a;
     Move mb = *(Move*)b;
-    return ((int)get_from_square(ma)) - ((int)get_from_square(mb));
+
+    int from_a = get_from_square(ma);
+    int from_b = get_from_square(mb); 
+
+    if (from_a == from_b)
+        return ((int)get_to_square(ma)) - ((int)get_to_square(mb));
+
+    return from_a - from_b;
 }
 
 void sort_move_list_by_from_square(MoveList* move_list) {

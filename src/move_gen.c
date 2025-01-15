@@ -143,14 +143,14 @@ void generate_bishop_moves(MoveList* move_list, Bitboard bishops, Bitboard us_pi
 	Bitboard empty = ~(us_pieces | enemy_pieces);
 
 	while (bishops) {
-		Square bishop_square = pop_lsb_position(&bishops);
+		char bishop_square = (char) pop_lsb_position(&bishops);
 
-		for (char ne = bishop_square; ne += NORTH_EAST; ne <= 63) {
-			Square to = 1ULL << ne;
+		for (char to = bishop_square + NORTH_EAST; to <= 63; to += NORTH_EAST) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(bishop_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(bishop_square, to, CAPTURE));
 				break;
 			} else {
@@ -158,12 +158,12 @@ void generate_bishop_moves(MoveList* move_list, Bitboard bishops, Bitboard us_pi
 			}
 		}
 
-		for (char se = bishop_square; se += SOUTH_EAST; se >= 7) {
-			Square to = 1ULL << se;
+		for (char to = bishop_square + SOUTH_EAST; to >= 7; to += SOUTH_EAST) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(bishop_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(bishop_square, to, CAPTURE));
 				break;
 			} else {
@@ -171,12 +171,12 @@ void generate_bishop_moves(MoveList* move_list, Bitboard bishops, Bitboard us_pi
 			}
 		}
 
-		for (char sw = bishop_square; sw += SOUTH_WEST; sw >= 0) {
-			Square to = 1ULL << sw;
+		for (char to = bishop_square + SOUTH_WEST; to >= 0; to += SOUTH_WEST) {
+			Square to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(bishop_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(bishop_square, to, CAPTURE));
 				break;
 			} else {
@@ -184,12 +184,12 @@ void generate_bishop_moves(MoveList* move_list, Bitboard bishops, Bitboard us_pi
 			}
 		}
 
-		for (char nw = bishop_square; nw += NORTH_WEST; nw <= 56) {
-			Square to = 1ULL << nw;
+		for (char to = bishop_square + NORTH_WEST; to <= 56; to += NORTH_WEST) {
+			Square to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(bishop_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(bishop_square, to, CAPTURE));
 				break;
 			} else {
@@ -205,12 +205,12 @@ void generate_rook_moves(MoveList* move_list, Bitboard rooks, Bitboard us_pieces
 	while (rooks) {
 		Square rook_square = pop_lsb_position(&rooks);
 
-		for (char n = rook_square; n < 64; n += NORTH) {
-			Square to = 1ULL << n;
+		for (char to = rook_square + NORTH; to <= 63; to += NORTH) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(rook_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(rook_square, to, CAPTURE));
 				break;
 			} else {
@@ -218,12 +218,12 @@ void generate_rook_moves(MoveList* move_list, Bitboard rooks, Bitboard us_pieces
 			}
 		}
 
-		for (char e = rook_square; e % 8 != 0; e += EAST) {
-			Square to = 1ULL << e;
+		for (char to = rook_square + EAST; to % 8 != 0; to += EAST) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(rook_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(rook_square, to, CAPTURE));
 				break;
 			} else {
@@ -231,12 +231,12 @@ void generate_rook_moves(MoveList* move_list, Bitboard rooks, Bitboard us_pieces
 			}
 		}
 
-		for (char s = rook_square; s >= 0; s += SOUTH) {
-			Square to = 1ULL << s;
+		for (char to = rook_square + SOUTH; to >= 0; to += SOUTH) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(rook_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(rook_square, to, CAPTURE));
 				break;
 			} else {
@@ -244,12 +244,12 @@ void generate_rook_moves(MoveList* move_list, Bitboard rooks, Bitboard us_pieces
 			}
 		}
 
-		for (char w = rook_square; (w + 1) % 8 != 0; w += WEST) {
-			Square to = 1ULL << w;
+		for (char to = rook_square + WEST; (to + 1) % 8 != 0; to += WEST) {
+			Bitboard to_bb = 1ULL << to;
 
-			if (to & empty) {
+			if (to_bb & empty) {
 				add_move(move_list, create_move(rook_square, to, QUIET_MOVE));
-			} else if (to & enemy_pieces) {
+			} else if (to_bb & enemy_pieces) {
 				add_move(move_list, create_move(rook_square, to, CAPTURE));
 				break;
 			} else {
@@ -264,33 +264,29 @@ void generate_queen_moves(MoveList* move_list, Bitboard queen, Bitboard us_piece
 	generate_rook_moves(move_list, queen, us_pieces, enemy_pieces);
 }
 
-void generate_king_moves(MoveList* move_list, Bitboard king, Bitboard us_pieces, Bitboard enemy_pieces) {
-	Bitboard quiet_moves = create_bitboard();
-	Bitboard captures = create_bitboard();
+Bitboard get_king_squares_with_mask(Bitboard king, Bitboard mask) {
+	Bitboard squares = create_bitboard();
 
+	squares |= (king << 7) & mask & ~RANK_1 & ~FILE_H; // NW
+	squares |= (king << 8) & mask & ~RANK_1; // N
+	squares |= (king << 9) & mask & ~RANK_1 & ~FILE_A; // NE
+	squares |= (king << 1) & mask & ~FILE_A; // E
+
+	squares |= (king >> 7) & mask & ~RANK_8 & ~FILE_A; // SE
+	squares |= (king >> 8) & mask & ~RANK_8; // S
+	squares |= (king >> 9) & mask & ~RANK_8 & ~FILE_H; // SW
+	squares |= (king >> 1) & mask & ~FILE_H; // W
+	
+	return squares;
+}
+
+void generate_king_moves(MoveList* move_list, Bitboard king, Bitboard us_pieces, Bitboard enemy_pieces) {
 	Bitboard empty = ~(us_pieces | enemy_pieces);
 
+	Bitboard quiet_moves = get_king_squares_with_mask(king, empty);
+	Bitboard captures = get_king_squares_with_mask(king, enemy_pieces);
+
 	Square king_square = pop_lsb_position(&king);
-
-	quiet_moves |= (king_square << 7) & empty & ~RANK_1 & ~FILE_H; // NW
-	quiet_moves |= (king_square << 8) & empty & ~RANK_1; // N
-	quiet_moves |= (king_square << 9) & empty & ~RANK_1 & ~FILE_A; // NE
-	quiet_moves |= (king_square << 1) & empty & ~FILE_A; // E
-
-	quiet_moves |= (king_square >> 7) & empty & ~RANK_8 & ~FILE_A; // SE
-	quiet_moves |= (king_square >> 8) & empty & ~RANK_8; // S
-	quiet_moves |= (king_square >> 9) & empty & ~RANK_8 & ~FILE_H; // SW
-	quiet_moves |= (king_square >> 1) & empty & ~FILE_H; // W
-
-	captures |= (king_square << 7) & enemy_pieces & ~RANK_1 & ~FILE_H; // NW
-	captures |= (king_square << 8) & enemy_pieces & ~RANK_1; // N
-	captures |= (king_square << 9) & enemy_pieces & ~RANK_1 & ~FILE_A; // NE
-	captures |= (king_square << 1) & enemy_pieces & ~FILE_A; // E
-
-	captures |= (king_square >> 7) & enemy_pieces & ~RANK_8 & ~FILE_A; // SE
-	captures |= (king_square >> 8) & enemy_pieces & ~RANK_8; // S
-	captures |= (king_square >> 9) & enemy_pieces & ~RANK_8 & ~FILE_H; // SW
-	captures |= (king_square >> 1) & enemy_pieces & ~FILE_H; // W
 
 	while (quiet_moves) {
 		Square to = pop_lsb_position(&quiet_moves);

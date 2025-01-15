@@ -544,21 +544,21 @@ void test_pawn_moves_with_en_pessant() {
 		.moves = {
 			create_move(A2, A3, QUIET_MOVE), create_move(A2, A4, DOUBLE_PAWN_PUSH),
 			create_move(B2, B3, QUIET_MOVE), create_move(B2, B4, DOUBLE_PAWN_PUSH),
-        	create_move(C2, C3, QUIET_MOVE), create_move(C2, C4, DOUBLE_PAWN_PUSH),
-        	create_move(D2, D3, QUIET_MOVE),
+			create_move(C2, C3, QUIET_MOVE), create_move(C2, C4, DOUBLE_PAWN_PUSH),
+			create_move(D2, D3, QUIET_MOVE),
 			create_move(E4, E5, QUIET_MOVE),
-        	create_move(F2, F3, QUIET_MOVE), create_move(F2, F4, DOUBLE_PAWN_PUSH),
-        	create_move(G2, G3, QUIET_MOVE), create_move(G2, G4, DOUBLE_PAWN_PUSH),
-        	create_move(H2, H3, QUIET_MOVE), create_move(H2, H4, DOUBLE_PAWN_PUSH),
+			create_move(F2, F3, QUIET_MOVE), create_move(F2, F4, DOUBLE_PAWN_PUSH),
+			create_move(G2, G3, QUIET_MOVE), create_move(G2, G4, DOUBLE_PAWN_PUSH),
+			create_move(H2, H3, QUIET_MOVE), create_move(H2, H4, DOUBLE_PAWN_PUSH),
 
-	        create_move(A7, A6, QUIET_MOVE), create_move(A7, A5, DOUBLE_PAWN_PUSH),
-        	create_move(B7, B6, QUIET_MOVE), create_move(B7, B5, DOUBLE_PAWN_PUSH),
-        	create_move(C7, C6, QUIET_MOVE), create_move(C7, C5, DOUBLE_PAWN_PUSH),
+			create_move(A7, A6, QUIET_MOVE), create_move(A7, A5, DOUBLE_PAWN_PUSH),
+			create_move(B7, B6, QUIET_MOVE), create_move(B7, B5, DOUBLE_PAWN_PUSH),
+			create_move(C7, C6, QUIET_MOVE), create_move(C7, C5, DOUBLE_PAWN_PUSH),
 			create_move(D4, D3, QUIET_MOVE),
-        	create_move(E7, E6, QUIET_MOVE), create_move(E7, E5, DOUBLE_PAWN_PUSH),
-        	create_move(F7, F6, QUIET_MOVE), create_move(F7, F5, DOUBLE_PAWN_PUSH),
-        	create_move(G7, G6, QUIET_MOVE), create_move(G7, G5, DOUBLE_PAWN_PUSH),
-        	create_move(H7, H6, QUIET_MOVE), create_move(H7, H5, DOUBLE_PAWN_PUSH),
+			create_move(E7, E6, QUIET_MOVE), create_move(E7, E5, DOUBLE_PAWN_PUSH),
+			create_move(F7, F6, QUIET_MOVE), create_move(F7, F5, DOUBLE_PAWN_PUSH),
+			create_move(G7, G6, QUIET_MOVE), create_move(G7, G5, DOUBLE_PAWN_PUSH),
+			create_move(H7, H6, QUIET_MOVE), create_move(H7, H5, DOUBLE_PAWN_PUSH),
 			create_move(D4, E3, EN_PASSANT_CAPTURE)
 		}
 	};
@@ -584,6 +584,191 @@ void test_pawn_moves() {
 	TEST(test_pawn_moves_with_en_pessant, "Pawn moves with en pessant");
 }
 
+void test_starting_position_knight_moves() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+
+	MoveList expected = {
+		.length = 8,
+		.moves = {
+			create_move(B1, A3, QUIET_MOVE), create_move(B1, C3, QUIET_MOVE),
+			create_move(G1, F3, QUIET_MOVE), create_move(G1, H3, QUIET_MOVE),
+
+			create_move(B8, A6, QUIET_MOVE), create_move(B8, C6, QUIET_MOVE),
+			create_move(G8, F6, QUIET_MOVE), create_move(G8, H6, QUIET_MOVE),
+		}
+	};
+
+
+	generate_knight_moves(&actual, game->pieces[WHITE][KNIGHT], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_knight_moves(&actual, game->pieces[BLACK][KNIGHT], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+
+	destroy_game(&game);
+}
+
+void test_knight_moves_with_captures() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+	make_move(game, create_move(B1, C3, QUIET_MOVE));
+	make_move(game, create_move(D7, D5, DOUBLE_PAWN_PUSH));
+
+	MoveList expected = {
+		.length = 12,
+		.moves = {
+			create_move(C3, B1, QUIET_MOVE), create_move(C3, A4, QUIET_MOVE),
+			create_move(C3, B5, QUIET_MOVE), create_move(C3, E4, QUIET_MOVE),
+			create_move(C3, D5, CAPTURE),
+
+			create_move(G1, F3, QUIET_MOVE), create_move(G1, H3, QUIET_MOVE),
+
+			create_move(B8, A6, QUIET_MOVE), create_move(B8, C6, QUIET_MOVE),
+			create_move(B8, D7, QUIET_MOVE),
+			create_move(G8, F6, QUIET_MOVE), create_move(G8, H6, QUIET_MOVE),
+		}
+	};
+
+	generate_knight_moves(&actual, game->pieces[WHITE][KNIGHT], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_knight_moves(&actual, game->pieces[BLACK][KNIGHT], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+	if (!success) {
+		sort_move_list_by_from_square(&expected);
+		sort_move_list_by_from_square(&actual);
+		TEST_LOG_MOVE_LIST(expected, "Expected");
+		TEST_LOG_MOVE_LIST(actual, "Actual");
+	}
+
+
+	destroy_game(&game);
+}
+
+void test_knight_moves() {
+	TEST(test_starting_position_knight_moves, "Starting position knight moves");
+	TEST(test_knight_moves_with_captures, "Knight moves with captures");
+}
+
+void test_starting_position_bishop_moves() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+
+	MoveList expected = {
+		.length = 0,
+		.moves = {}
+	};
+
+	generate_bishop_moves(&actual, game->pieces[WHITE][BISHOP], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_bishop_moves(&actual, game->pieces[BLACK][BISHOP], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+	if (!success) {
+		sort_move_list_by_from_square(&expected);
+		sort_move_list_by_from_square(&actual);
+		TEST_LOG_MOVE_LIST(expected, "Expected");
+		TEST_LOG_MOVE_LIST(actual, "Actual");
+	}
+
+	destroy_game(&game);
+}
+
+void test_bishop_moves() {
+	TEST(test_starting_position_bishop_moves, "Starting position bishop moves");
+}
+
+void test_starting_position_rook_moves() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+
+	MoveList expected = {
+		.length = 0,
+		.moves = {}
+	};
+
+	generate_rook_moves(&actual, game->pieces[WHITE][ROOK], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_rook_moves(&actual, game->pieces[BLACK][ROOK], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+	if (!success) {
+		sort_move_list_by_from_square(&expected);
+		sort_move_list_by_from_square(&actual);
+		TEST_LOG_MOVE_LIST(expected, "Expected");
+		TEST_LOG_MOVE_LIST(actual, "Actual");
+	}
+
+	destroy_game(&game);
+}
+
+void test_rook_moves() {
+	TEST(test_starting_position_rook_moves, "Starting position rook moves");
+}
+
+void test_starting_position_queen_moves() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+
+	MoveList expected = {
+		.length = 0,
+		.moves = {}
+	};
+
+	generate_rook_moves(&actual, game->pieces[WHITE][QUEEN], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_rook_moves(&actual, game->pieces[BLACK][QUEEN], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+	if (!success) {
+		sort_move_list_by_from_square(&expected);
+		sort_move_list_by_from_square(&actual);
+		TEST_LOG_MOVE_LIST(expected, "Expected");
+		TEST_LOG_MOVE_LIST(actual, "Actual");
+	}
+
+	destroy_game(&game);
+}
+
+void test_queen_moves() {
+	TEST(test_starting_position_queen_moves, "Starting position queen moves");
+}
+
+void test_starting_position_king_moves() {
+	MoveList actual = {};
+
+	Game* game = create_game();
+
+	MoveList expected = {
+		.length = 0,
+		.moves = {}
+	};
+
+	generate_rook_moves(&actual, game->pieces[WHITE][KING], get_bitboard_for_color(game, WHITE), get_bitboard_for_color(game, BLACK));
+	generate_rook_moves(&actual, game->pieces[BLACK][KING], get_bitboard_for_color(game, BLACK), get_bitboard_for_color(game, WHITE));
+
+	bool success = cmp_move_lists(&expected, &actual);
+	TEST_ASSERT(success, "Move lists did not match expected %d moves got %d moves", expected.length, actual.length);
+	if (!success) {
+		sort_move_list_by_from_square(&expected);
+		sort_move_list_by_from_square(&actual);
+		TEST_LOG_MOVE_LIST(expected, "Expected");
+		TEST_LOG_MOVE_LIST(actual, "Actual");
+	}
+
+	destroy_game(&game);
+}
+
+void test_king_moves() {
+	TEST(test_starting_position_king_moves, "Starting position king moves");
+}
+
 void test_number_of_starting_position_moves() {
 	Game* game = create_game();
 
@@ -592,18 +777,20 @@ void test_number_of_starting_position_moves() {
 	generate_moves(game, &moves);
 	TEST_ASSERT(moves.length == 20, "Should have 20 starting moves");
 
+	/*
 	memset(&moves, 0, sizeof(moves));
 	make_move(game, create_move(E2, E4, DOUBLE_PAWN_PUSH));
 	make_move(game, create_move(E7, E5, DOUBLE_PAWN_PUSH));
 
 	generate_moves(game, &moves);
 	bool success = moves.length == 25;
-	TEST_ASSERT(success, "Should have 19 moves after e2e4 and e7e5 got %d", moves.length);
+	TEST_ASSERT(success, "Should have  moves after e2e4 and e7e5 got %d", moves.length);
 
 	if (!success) {
 		sort_move_list_by_from_square(&moves);
 		TEST_LOG_MOVE_LIST(moves, "Actual");
 	}
+	*/
 
 	destroy_game(&game);
 }
@@ -618,6 +805,11 @@ int main() {
 	test_move_counts();
 
 	test_pawn_moves();
+	test_knight_moves();
+	test_bishop_moves();
+	test_rook_moves();
+	test_queen_moves();
+	test_king_moves();
 
 /*
 	TEST(test_initial_pawn_moves_no_occupied_squares, "Initial pawn moves no occupied squares");

@@ -8,6 +8,10 @@
 #include "move.h"
 
 typedef struct {
+	bool empty_board;
+} GameOptions;
+
+typedef struct {
 	Bitboard pieces[2][6];
 
 	// index = halfmove_count
@@ -28,6 +32,7 @@ typedef struct {
 } PieceLocInfo;
 
 Game* create_game();
+Game* create_game_with_options(GameOptions);
 void destroy_game(Game**);
 
 Move get_last_move(const Game*);
