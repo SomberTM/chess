@@ -11,3 +11,8 @@ Square pop_lsb_position(Bitboard* bb) {
     *bb &= (*bb - 1);
     return position;
 }
+
+Square get_lsb_position(Bitboard bb) {
+    Square position = __builtin_ctzll(bb);
+    return position;
+}

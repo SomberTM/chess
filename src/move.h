@@ -28,5 +28,6 @@ Move create_move(Square, Square, MoveFlag);
 Square get_from_square(Move);
 Square get_to_square(Move);
 MoveFlag get_flag(Move);
+Piece get_promotion_piece(MoveFlag);
 
 #endif // !MOVE_H

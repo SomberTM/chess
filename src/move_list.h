@@ -1,7 +1,7 @@
 #ifndef MOVE_LIST_H
 #define MOVE_LIST_H
 
-#define MOVE_LIST_CAPACITY 1024
+#define MOVE_LIST_CAPACITY 256
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -17,6 +17,9 @@ typedef struct {
  * Adds the given move to the provided move list ignoring duplicate moves
  */
 void add_move(MoveList*, Move);
+void remove_move(MoveList*, Move);
+void remove_move_at(MoveList*, size_t);
+
 bool contains_move(const MoveList*, Move);
 bool cmp_move_lists(const MoveList*, const MoveList*);
 void sort_move_list_by_from_square(MoveList*);

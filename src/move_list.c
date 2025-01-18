@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "move_list.h"
 
@@ -6,6 +7,28 @@ void add_move(MoveList* move_list, Move move) {
     if (contains_move(move_list, move)) return;
 
     move_list->moves[move_list->length++] = move;
+}
+
+void remove_move(MoveList* move_list, Move move) {
+    size_t idx;
+
+    for (idx = 0; idx < move_list->length; idx++) {
+        if (move_list->moves[idx] == move) break;
+    } 
+
+    remove_move_at(move_list, idx);
+}
+
+void remove_move_at(MoveList* move_list, size_t idx) {
+    assert(idx < move_list->length);
+
+    move_list->moves[idx] = 0;
+
+    for (size_t i = idx+ 1; i < move_list->length; i++) {
+        move_list->moves[i - 1] = move_list->moves[i];
+    }
+
+    move_list->length--;
 }
 
 bool contains_move(const MoveList* move_list, Move move) {

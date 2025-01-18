@@ -39,7 +39,7 @@
 
 #define TEST_LOG_BB_PRETTY(bb) \
     do { \
-        printf("\t[LOG]"); \
+        printf("\t[LOG] "); \
         for (int i = 7; i >= 0; i--) { \
             if (i != 7) printf("\t       "); \
             else printf(" "); \

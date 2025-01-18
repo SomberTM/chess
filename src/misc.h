@@ -6,5 +6,6 @@
 
 Bitboard pop_lsb(Bitboard*);
 Square pop_lsb_position(Bitboard*);
+Square get_lsb_position(Bitboard);
 
 #endif
